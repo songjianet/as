@@ -20,4 +20,6 @@ export function processHeaders(headers: any, data: any): any {
       headers['Content-Type'] = 'application/json;charset=utf-8 '
     }
   }
+
+  return headers
 }
