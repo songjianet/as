@@ -7,8 +7,8 @@ import xhr from './xhr'
 /**
  * 接收请求信息
  *
- * @param config {object} 请求信息
- * @returns AsPromise {object} promise格式的返回信息
+ * @param config {AsRequestConfig} 请求信息
+ * @returns {AsPromise} promise格式的返回信息
  * @author songjianet
  */
 function as(config: AsRequestConfig): AsPromise {
@@ -21,7 +21,7 @@ function as(config: AsRequestConfig): AsPromise {
 /**
  * 处理请求信息
  *
- * @param config {object} 请求信息
+ * @param config {AsRequestConfig} 请求信息
  * @author songjianet
  */
 function processConfig(config: AsRequestConfig): void {
@@ -33,7 +33,7 @@ function processConfig(config: AsRequestConfig): void {
 /**
  * 处理URL
  *
- * @param config {object} 请求信息
+ * @param config {AsRequestConfig} 请求信息
  * @returns {string} 处理后的URL
  * @author songjianet
  */
@@ -45,7 +45,7 @@ function transformURL(config: AsRequestConfig): string {
 /**
  * 处理data参数
  *
- * @param config {object} 请求信息
+ * @param config {AsRequestConfig} 请求信息
  * @returns {any} 处理后的data
  * @author songjianet
  */
@@ -56,7 +56,7 @@ function transformRequestData(config: AsRequestConfig): any {
 /**
  * 处理请求头
  *
- * @param config {object} 请求信息
+ * @param config {AsRequestConfig} 请求信息
  * @returns {any} 返回处理后的信息
  * @author songjianet
  */
@@ -69,7 +69,7 @@ function transformHeader(config: AsRequestConfig): any {
  * 处理返回信息中的data字符串问题
  *
  * @param res {AsResponseConfig} 请求返回的信息
- * @returns {any} 返回处理后的信息
+ * @returns {AsResponseConfig} 返回处理后的信息
  * @author songjianet
  */
 function transformResponseData(res: AsResponseConfig): AsResponseConfig {

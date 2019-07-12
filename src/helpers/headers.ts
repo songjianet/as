@@ -43,7 +43,7 @@ export function processHeaders(headers: any, data: any): any {
 /**
  * 将返回信息中的headers从字符串形式转换为对象形式
  *
- * @param headers {any} 返回信息中的headers字段
+ * @param headers {string} 返回信息中的headers字段
  * @returns {any} 处理后的headers对象
  * @author songjianet
  */

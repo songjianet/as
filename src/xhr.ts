@@ -4,8 +4,8 @@ import { parseHeaders } from './helpers/headers'
 /**
  * 发送请求
  *
- * @param config {object} 请求信息
- * @returns AsPromise {object} promise格式的返回信息
+ * @param config {AsRequestConfig} 请求信息
+ * @returns {AsPromise} promise格式的返回信息
  * @author songjianet
  */
 export default function xhr(config: AsRequestConfig): AsPromise {
