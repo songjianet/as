@@ -39,3 +39,31 @@ export function processHeaders(headers: any, data: any): any {
 
   return headers
 }
+
+/**
+ * 将返回信息中的headers从字符串形式转换为对象形式
+ *
+ * @param headers {any} 返回信息中的headers字段
+ * @returns {any} 处理后的headers对象
+ * @author songjianet
+ */
+export function parseHeaders(headers: string): any {
+  let parse = Object.create(null)
+  if (!headers) {
+    return parse
+  }
+
+  headers.split('\r\n').forEach(l => {
+    let [key, val] = l.split(':')
+    key = key.trim().toLowerCase()
+    if (!key) {
+      return
+    }
+    if (val) {
+      val = val.trim()
+    }
+    parse[key] = val
+  })
+
+  return parse
+}
