@@ -1,6 +1,6 @@
-import { AsRequestConfig, AsPromise } from './types'
+import { AsRequestConfig, AsResponseConfig, AsPromise } from './types'
 import { buildURL } from './helpers/url'
-import { transformRequest } from './helpers/data'
+import { transformRequest, transformResponse } from './helpers/data'
 import { processHeaders } from './helpers/headers'
 import xhr from './xhr'
 
@@ -13,7 +13,9 @@ import xhr from './xhr'
  */
 function as(config: AsRequestConfig): AsPromise {
   processConfig(config)
-  return xhr(config)
+  return xhr(config).then(res => {
+    return transformResponseData(res)
+  })
 }
 
 /**
@@ -61,6 +63,18 @@ function transformRequestData(config: AsRequestConfig): any {
 function transformHeader(config: AsRequestConfig): any {
   const { headers = {}, data } = config
   return processHeaders(headers, data)
+}
+
+/**
+ * 处理返回信息中的data字符串问题
+ *
+ * @param res {AsResponseConfig} 请求返回的信息
+ * @returns {any} 返回处理后的信息
+ * @author songjianet
+ */
+function transformResponseData(res: AsResponseConfig): AsResponseConfig {
+  res.data = transformResponse(res.data)
+  return res
 }
 
 export default as

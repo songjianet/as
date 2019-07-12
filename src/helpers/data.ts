@@ -14,3 +14,21 @@ export function transformRequest(data: any): any {
   }
   return data
 }
+
+/**
+ * 处理返回的信息中data字段在没有规定responseType为json时候的字符串问题
+ *
+ * @param data {any} 返回信息中的data的数据
+ * @returns {any} 返回处理后的data
+ * @author songjianet
+ */
+export function transformResponse(data: any): any {
+  if (typeof data === 'string') {
+    try {
+      data = JSON.parse(data)
+    } catch (e) {
+      // do nothing
+    }
+  }
+  return data
+}
