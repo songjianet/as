@@ -1,5 +1,12 @@
 import { isPlainObject, isDate } from './util'
 
+/**
+ * 对URL参数中的特殊符号进行encode处理
+ *
+ * @param val {string} URL参数的key或value
+ * @param {string} 返回处理特殊字符后的字符串
+ * @author songjianet
+ */
 function encode(val: string): string {
   return encodeURIComponent(val)
     .replace(/%40/g, '@')
@@ -12,8 +19,12 @@ function encode(val: string): string {
 }
 
 /**
- * 处理url参数问题，包括对hash、特殊字符、参数拼接的处理
- * @author songjian
+ * 处理请求URL，包括对特殊字符、哈希和参数拼接的处理
+ *
+ * @param url {string} 请求地址
+ * @param params {any} 可选的请求参数
+ * @returns {string} 处理后的URL字符串
+ * @author songjianet
  */
 export function buildURL(url: string, params?: any): string {
   if (!params) {
