@@ -99,3 +99,26 @@ as({
   url: '/base/post',
   data: searchParams
 })
+
+as({
+  method: 'post',
+  url: '/base/post',
+  data: {
+    a: 1,
+    b: 2
+  }
+}).then(res => {
+  console.log(res)
+})
+
+as({
+  method: 'post',
+  url: '/base/post',
+  responseType: 'json',
+  data: {
+    a: 1,
+    b: 2
+  }
+}).then(res => {
+  console.log(res)
+})
