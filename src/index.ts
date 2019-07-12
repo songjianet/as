@@ -1,4 +1,4 @@
-import { AsRequestConfig } from './types'
+import { AsRequestConfig, AsPromise } from './types'
 import { buildURL } from './helpers/url'
 import { transformRequest } from './helpers/data'
 import { processHeaders } from './helpers/headers'
@@ -8,9 +8,9 @@ import xhr from './xhr'
  * 接收as请求信息
  * @author songjian
  */
-function as(config: AsRequestConfig): void {
+function as(config: AsRequestConfig): AsPromise {
   processConfig(config)
-  xhr(config)
+  return xhr(config)
 }
 
 function processConfig(config: AsRequestConfig): void {

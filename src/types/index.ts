@@ -1,7 +1,3 @@
-/**
- * 定义as中允许的method参数
- * @author songjian
- */
 export type Method =
   | 'get'
   | 'GET'
@@ -18,14 +14,22 @@ export type Method =
   | 'head'
   | 'HEAD'
 
-/**
- * 定义as请求头参数类型
- * @author songjian
- */
 export interface AsRequestConfig {
   url: string
   method?: Method
   data?: any
   params?: any
   headers?: any
+  responseType?: XMLHttpRequestResponseType
 }
+
+export interface AsResponseConfig {
+  data: any
+  status: number
+  statusText: string
+  headers: any
+  config: AsRequestConfig
+  request: any
+}
+
+export interface AsPromise extends Promise<AsResponseConfig> {}

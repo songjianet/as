@@ -1,23 +1,42 @@
-import { AsRequestConfig } from './types'
+import { AsRequestConfig, AsPromise, AsResponseConfig } from './types'
 
-/**
- * 包装请求
- * @author songjian
- */
-export default function xhr(config: AsRequestConfig): void {
-  const { data = null, url, method = 'get', headers } = config
+export default function xhr(config: AsRequestConfig): AsPromise {
+  return new Promise(resolve => {
+    const { data = null, url, method = 'get', headers, responseType } = config
 
-  const request = new XMLHttpRequest()
+    const request = new XMLHttpRequest()
 
-  request.open(method.toUpperCase(), url, true)
-
-  Object.keys(headers).forEach(n => {
-    if (data === null && n.toLowerCase() === 'content-type') {
-      delete headers[n]
-    } else {
-      request.setRequestHeader(n, headers[n])
+    if (responseType) {
+      request.responseType = responseType
     }
-  })
 
-  request.send(data)
+    request.open(method.toUpperCase(), url, true)
+
+    request.onreadystatechange = function handleLoad() {
+      if (request.readyState !== 4) {
+        return
+      }
+      const responseHeaders = request.getAllResponseHeaders()
+      const responseData = responseType !== 'text' ? request.response : request.responseText
+      const response: AsResponseConfig = {
+        data: responseData,
+        status: request.status,
+        statusText: request.statusText,
+        headers: responseHeaders,
+        config,
+        request
+      }
+      resolve(response)
+    }
+
+    Object.keys(headers).forEach(n => {
+      if (data === null && n.toLowerCase() === 'content-type') {
+        delete headers[n]
+      } else {
+        request.setRequestHeader(n, headers[n])
+      }
+    })
+
+    request.send(data)
+  })
 }
