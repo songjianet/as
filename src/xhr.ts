@@ -2,7 +2,7 @@ import { AsRequestConfig, AsPromise, AsResponseConfig } from './types'
 import { parseHeaders } from './helpers/headers'
 
 /**
- * 发送请求
+ * 处理请求，存储返回信息
  *
  * @param config {AsRequestConfig} 请求信息
  * @returns {AsPromise} promise格式的返回信息
@@ -10,15 +10,21 @@ import { parseHeaders } from './helpers/headers'
  */
 export default function xhr(config: AsRequestConfig): AsPromise {
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType } = config
+    const { data = null, url, method = 'get', headers, responseType, timeout } = config
 
     const request = new XMLHttpRequest()
 
+    // 设置超时
+    if (timeout) {
+      request.timeout = timeout
+    }
+
+    // 设置返回类型
     if (responseType) {
       request.responseType = responseType
     }
 
-    // 设置请求信息
+    // 打开请求
     request.open(method.toUpperCase(), url, true)
 
     // 包装返回数据
@@ -42,6 +48,11 @@ export default function xhr(config: AsRequestConfig): AsPromise {
     // 处理错误请求
     request.onerror = function handleError() {
       reject(new Error('Network Error!'))
+    }
+
+    // 处理超时请求
+    request.ontimeout = function handleTimeout() {
+      reject(new Error(`Timeout of ${timeout}ms exceeded!`))
     }
 
     // 处理请求头
