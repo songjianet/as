@@ -34,3 +34,11 @@ export interface AsResponseConfig {
 }
 
 export interface AsPromise extends Promise<AsResponseConfig> {}
+
+export interface AsError extends Error {
+  isAsError: boolean
+  config: AsRequestConfig
+  code?: string | null
+  request?: any
+  response: AsResponseConfig
+}

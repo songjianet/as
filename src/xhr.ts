@@ -1,5 +1,6 @@
 import { AsRequestConfig, AsPromise, AsResponseConfig } from './types'
 import { parseHeaders } from './helpers/headers'
+import { createError } from './helpers/error'
 
 /**
  * 处理请求，存储返回信息
@@ -52,12 +53,12 @@ export default function xhr(config: AsRequestConfig): AsPromise {
 
     // 处理错误请求
     request.onerror = function handleError() {
-      reject(new Error('Network Error!'))
+      reject(createError('Network Error!', config, null, request))
     }
 
     // 处理超时请求
     request.ontimeout = function handleTimeout() {
-      reject(new Error(`Timeout of ${timeout}ms exceeded!`))
+      reject(createError(`Timeout of ${timeout}ms exceeded!`, config, 'ECONNABORTED', request))
     }
 
     // 处理请求头
@@ -77,7 +78,9 @@ export default function xhr(config: AsRequestConfig): AsPromise {
       if (res.status >= 200 && res.status < 300) {
         resolve(res)
       } else {
-        reject(new Error(`Request failed with status code ${res.status}!`))
+        reject(
+          createError(`Request failed with status code ${res.status}!`, config, null, request, res)
+        )
       }
     }
   })
