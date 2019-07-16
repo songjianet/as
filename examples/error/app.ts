@@ -1,4 +1,4 @@
-import as from '../../src/index'
+import as, { AsError } from '../../src/index'
 
 as({
   method: 'get',
@@ -35,6 +35,10 @@ as({
   timeout: 2000
 }).then((res) => {
   console.log(res)
-}).catch((e) => {
-  console.log(e)
+}).catch((e: AsError) => {
+  console.log(e.message)
+  console.log(e.config)
+  console.log(e.code)
+  console.log(e.request)
+  console.log(e.isAsError)
 })
