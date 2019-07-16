@@ -1,6 +1,6 @@
-import { AsRequestConfig, AsPromise, AsResponseConfig } from './types'
-import { parseHeaders } from './helpers/headers'
-import { createError } from './helpers/error'
+import { AsRequestConfig, AsPromise, AsResponseConfig } from '../types'
+import { parseHeaders } from '../helpers/headers'
+import { createError } from '../helpers/error'
 
 /**
  * 处理请求，存储返回信息
@@ -26,7 +26,7 @@ export default function xhr(config: AsRequestConfig): AsPromise {
     }
 
     // 打开请求
-    request.open(method.toUpperCase(), url, true)
+    request.open(method.toUpperCase(), url!, true)
 
     // 包装返回数据
     request.onreadystatechange = function handleLoad() {
