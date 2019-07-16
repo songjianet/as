@@ -32,6 +32,11 @@ export default function xhr(config: AsRequestConfig): AsPromise {
       if (request.readyState !== 4) {
         return
       }
+
+      if (request.status === 0) {
+        return
+      }
+
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData = responseType !== 'text' ? request.response : request.responseText
       const response: AsResponseConfig = {
@@ -42,7 +47,7 @@ export default function xhr(config: AsRequestConfig): AsPromise {
         config,
         request
       }
-      resolve(response)
+      handleResponse(response)
     }
 
     // 处理错误请求
@@ -66,5 +71,14 @@ export default function xhr(config: AsRequestConfig): AsPromise {
 
     // 发送请求
     request.send(data)
+
+    // 处理http状态码
+    function handleResponse(res: AsResponseConfig): void {
+      if (res.status >= 200 && res.status < 300) {
+        resolve(res)
+      } else {
+        reject(new Error(`Request failed with status code ${res.status}!`))
+      }
+    }
   })
 }
