@@ -63,4 +63,6 @@ export interface As {
 
 export interface AsInstance extends As {
   (config: AsRequestConfig): AsPromise
+
+  (url: string, config?: AsRequestConfig): AsPromise
 }
