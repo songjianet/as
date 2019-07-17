@@ -36,3 +36,31 @@ as('/extend/post', {
     msg: 'hi'
   }
 })
+
+interface ResponseData<T = any> {
+  code: number
+  result: T
+  message: string
+}
+
+interface User {
+  name: string
+  age: number
+}
+
+function getUser<T>() {
+  // @ts-ignore
+  return as<ResponseData<T>>('/extend/user')
+    .then((res: { data: any; }) => res.data)
+    .catch((err: any) => console.error(err))
+}
+
+
+async function test() {
+  const user = await getUser<User>()
+  if (user) {
+    console.log(user.result.name)
+  }
+}
+
+test()
