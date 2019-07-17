@@ -49,10 +49,9 @@ interface User {
 }
 
 function getUser<T>() {
-  // @ts-ignore
   return as<ResponseData<T>>('/extend/user')
-    .then((res: { data: any; }) => res.data)
-    .catch((err: any) => console.error(err))
+    .then((res) => res.data)
+    .catch((err) => console.error(err))
 }
 
 
