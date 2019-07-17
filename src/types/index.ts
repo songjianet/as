@@ -24,8 +24,8 @@ export interface AsRequestConfig {
   timeout?: number
 }
 
-export interface AsResponseConfig {
-  data: any
+export interface AsResponseConfig<T = any> {
+  data: T
   status: number
   statusText: string
   headers: any
@@ -33,7 +33,7 @@ export interface AsResponseConfig {
   request: any
 }
 
-export interface AsPromise extends Promise<AsResponseConfig> {}
+export interface AsPromise<T = any> extends Promise<AsResponseConfig<T>> {}
 
 export interface AsError extends Error {
   isAsError: boolean
@@ -44,21 +44,21 @@ export interface AsError extends Error {
 }
 
 export interface As {
-  request(config: AsRequestConfig): AsPromise
+  request<T = any>(config: AsRequestConfig): AsPromise<T>
 
-  get(url: string, config?: AsRequestConfig): AsPromise
+  get<T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 
-  delete(url: string, config?: AsRequestConfig): AsPromise
+  delete<T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 
-  head(url: string, config?: AsRequestConfig): AsPromise
+  head<T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 
-  options(url: string, config?: AsRequestConfig): AsPromise
+  options<T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 
-  post(url: string, data?: any, config?: AsRequestConfig): AsPromise
+  post<T = any>(url: string, data?: any, config?: AsRequestConfig): AsPromise<T>
 
-  put(url: string, data?: any, config?: AsRequestConfig): AsPromise
+  put<T = any>(url: string, data?: any, config?: AsRequestConfig): AsPromise<T>
 
-  patch(url: string, data?: any, config?: AsRequestConfig): AsPromise
+  patch<T = any>(url: string, data?: any, config?: AsRequestConfig): AsPromise<T>
 }
 
 export interface AsInstance extends As {
