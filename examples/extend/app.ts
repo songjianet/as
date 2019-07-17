@@ -29,3 +29,10 @@ as.post('/extend/post', { msg: 'post' })
 as.put('/extend/put', { msg: 'put' })
 
 as.patch('/extend/patch', { msg: 'patch' })
+
+as('/extend/post', {
+  method: 'post',
+  data: {
+    msg: 'hi'
+  }
+})
