@@ -66,3 +66,17 @@ export interface AsInstance extends As {
 
   <T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 }
+
+export interface AsInterceptorManager<T> {
+  use(resolved: ResolvedFn<T>, rejected: RejectedFn): number
+
+  eject(id: number): void
+}
+
+export interface ResolvedFn<T> {
+  (val: T): T | Promise<T>
+}
+
+export interface RejectedFn {
+  (error: any): any
+}
