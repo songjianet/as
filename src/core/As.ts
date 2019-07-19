@@ -1,7 +1,34 @@
-import { AsPromise, AsRequestConfig, Method } from '../types'
+import {
+  AsPromise,
+  AsRequestConfig,
+  AsResponseConfig,
+  Method,
+  RejectedFn,
+  ResolvedFn
+} from '../types'
 import dispatchRequest from './dispatchRequest'
+import InterceptorManager from './interceptorManager'
+
+interface Interceptors {
+  request: InterceptorManager<AsRequestConfig>
+  response: InterceptorManager<AsResponseConfig>
+}
+
+interface PromiseChain<T> {
+  resolved: ResolvedFn<T> | ((config: AsRequestConfig) => AsPromise)
+  rejected?: RejectedFn
+}
 
 export default class As {
+  interceptors: Interceptors
+
+  constructor() {
+    this.interceptors = {
+      request: new InterceptorManager<AsRequestConfig>(),
+      response: new InterceptorManager<AsResponseConfig>()
+    }
+  }
+
   request(url: any, config?: any): AsPromise {
     if (typeof url === 'string') {
       if (!config) {
@@ -11,7 +38,30 @@ export default class As {
     } else {
       config = url
     }
-    return dispatchRequest(config)
+
+    const chain: PromiseChain<any>[] = [
+      {
+        resolved: dispatchRequest,
+        rejected: undefined
+      }
+    ]
+
+    this.interceptors.request.forEach(interceptor => {
+      chain.unshift(interceptor)
+    })
+
+    this.interceptors.response.forEach(interceptor => {
+      chain.push(interceptor)
+    })
+
+    let promise = Promise.resolve(config)
+
+    while (chain.length) {
+      const { resolved, rejected } = chain.shift()!
+      promise = promise.then(resolved, rejected)
+    }
+
+    return promise
   }
 
   get(url: string, config?: AsRequestConfig): AsPromise {
