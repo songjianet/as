@@ -20,9 +20,11 @@ interface PromiseChain<T> {
 }
 
 export default class As {
+  defaluts: AsRequestConfig
   interceptors: Interceptors
 
-  constructor() {
+  constructor(initConfig: AsRequestConfig) {
+    this.defaluts = initConfig
     this.interceptors = {
       request: new InterceptorManager<AsRequestConfig>(),
       response: new InterceptorManager<AsResponseConfig>()
