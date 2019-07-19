@@ -44,6 +44,11 @@ export interface AsError extends Error {
 }
 
 export interface As {
+  interceptors: {
+    request: AsInterceptorManager<AsRequestConfig>
+    response: AsInterceptorManager<AsResponseConfig>
+  }
+
   request<T = any>(config: AsRequestConfig): AsPromise<T>
 
   get<T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
@@ -68,7 +73,7 @@ export interface AsInstance extends As {
 }
 
 export interface AsInterceptorManager<T> {
-  use(resolved: ResolvedFn<T>, rejected: RejectedFn): number
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
 
   eject(id: number): void
 }
