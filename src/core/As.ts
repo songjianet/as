@@ -21,11 +21,11 @@ interface PromiseChain<T> {
 }
 
 export default class As {
-  defaluts: AsRequestConfig
+  defaults: AsRequestConfig
   interceptors: Interceptors
 
   constructor(initConfig: AsRequestConfig) {
-    this.defaluts = initConfig
+    this.defaults = initConfig
     this.interceptors = {
       request: new InterceptorManager<AsRequestConfig>(),
       response: new InterceptorManager<AsResponseConfig>()
@@ -42,7 +42,7 @@ export default class As {
       config = url
     }
 
-    config = mergeConfig(this.defaluts, config)
+    config = mergeConfig(this.defaults, config)
 
     const chain: PromiseChain<any>[] = [
       {
