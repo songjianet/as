@@ -46,6 +46,7 @@ export interface AsError extends Error {
 }
 
 export interface As {
+  defaults: AsRequestConfig
   interceptors: {
     request: AsInterceptorManager<AsRequestConfig>
     response: AsInterceptorManager<AsResponseConfig>
