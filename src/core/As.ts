@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
   request: InterceptorManager<AsRequestConfig>
@@ -40,6 +41,8 @@ export default class As {
     } else {
       config = url
     }
+
+    config = mergeConfig(this.defaluts, config)
 
     const chain: PromiseChain<any>[] = [
       {
