@@ -24,6 +24,7 @@ export interface AsRequestConfig {
   timeout?: number
   transformRequest?: AsTransformer | AsTransformer[]
   transformResponse?: AsTransformer | AsTransformer[]
+  cancelToken?: CancelToken
 
   [propName: string]: any // 为合并请求默认属性设置一个签名，可以参考/src/core/mergeConfig文件
 }
@@ -97,4 +98,27 @@ export interface RejectedFn {
 
 export interface AsTransformer {
   (data: any, headers: any): any
+}
+
+export interface CancelToken {
+  promise: Promise<string>
+  reason?: string
+}
+
+export interface Canceler {
+  (msg?: string): void
+}
+
+export interface CancelExecutor {
+  (cancel: Canceler): void
+}
+
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
 }
