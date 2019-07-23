@@ -77,6 +77,10 @@ export interface AsInstance extends As {
   <T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 }
 
+export interface AsStatic extends AsInstance {
+  create(config?: AsRequestConfig): AsInstance
+}
+
 export interface AsInterceptorManager<T> {
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
 
