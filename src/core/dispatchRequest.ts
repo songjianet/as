@@ -1,8 +1,8 @@
 import { AsRequestConfig, AsResponseConfig, AsPromise } from '../types'
 import { buildURL } from '../helpers/url'
-import { transformRequest, transformResponse } from '../helpers/data'
-import { flattenHeaders, processHeaders } from '../helpers/headers'
+import { flattenHeaders } from '../helpers/headers'
 import xhr from './xhr'
+import { transform } from './transform'
 
 /**
  * 接收请求信息
@@ -26,8 +26,7 @@ export default function dispatchRequest(config: AsRequestConfig): AsPromise {
  */
 function processConfig(config: AsRequestConfig): void {
   config.url = transformURL(config)
-  config.headers = transformHeader(config)
-  config.data = transformRequestData(config)
+  config.data = transform(config.data, config.headers, config.transformRequest)
   config.headers = flattenHeaders(config.headers, config.method!)
 }
 
@@ -44,29 +43,6 @@ function transformURL(config: AsRequestConfig): string {
 }
 
 /**
- * 处理data参数
- *
- * @param config {AsRequestConfig} 请求信息
- * @returns {any} 处理后的data
- * @author songjianet
- */
-function transformRequestData(config: AsRequestConfig): any {
-  return transformRequest(config.data)
-}
-
-/**
- * 处理请求头
- *
- * @param config {AsRequestConfig} 请求信息
- * @returns {any} 返回处理后的信息
- * @author songjianet
- */
-function transformHeader(config: AsRequestConfig): any {
-  const { headers = {}, data } = config
-  return processHeaders(headers, data)
-}
-
-/**
  * 处理返回信息中的data字符串问题
  *
  * @param res {AsResponseConfig} 请求返回的信息
@@ -74,6 +50,6 @@ function transformHeader(config: AsRequestConfig): any {
  * @author songjianet
  */
 function transformResponseData(res: AsResponseConfig): AsResponseConfig {
-  res.data = transformResponse(res.data)
+  res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
 }

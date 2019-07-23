@@ -22,8 +22,8 @@ export interface AsRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
-  transformRequest?: Astransformer | Astransformer[]
-  transformResponse?: Astransformer | Astransformer[]
+  transformRequest?: AsTransformer | AsTransformer[]
+  transformResponse?: AsTransformer | AsTransformer[]
 
   [propName: string]: any // 为合并请求默认属性设置一个签名，可以参考/src/core/mergeConfig文件
 }
@@ -91,6 +91,6 @@ export interface RejectedFn {
   (error: any): any
 }
 
-export interface Astransformer {
+export interface AsTransformer {
   (data: any, headers: any): any
 }
