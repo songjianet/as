@@ -11,7 +11,16 @@ import { createError } from '../helpers/error'
  */
 export default function xhr(config: AsRequestConfig): AsPromise {
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType, timeout, cancelToken } = config
+    const {
+      data = null,
+      url,
+      method = 'get',
+      headers,
+      responseType,
+      timeout,
+      cancelToken,
+      withCredentials
+    } = config
 
     const request = new XMLHttpRequest()
 
@@ -23,6 +32,10 @@ export default function xhr(config: AsRequestConfig): AsPromise {
     // 设置返回类型
     if (responseType) {
       request.responseType = responseType
+    }
+
+    if (withCredentials) {
+      request.withCredentials = withCredentials
     }
 
     // 打开请求
