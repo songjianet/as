@@ -12,6 +12,7 @@ import { transform } from './transform'
  * @author songjianet
  */
 export default function dispatchRequest(config: AsRequestConfig): AsPromise {
+  throwIfCancellationRequested(config)
   processConfig(config)
   return xhr(config).then(res => {
     return transformResponseData(res)
@@ -52,4 +53,10 @@ function transformURL(config: AsRequestConfig): string {
 function transformResponseData(res: AsResponseConfig): AsResponseConfig {
   res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
+}
+
+function throwIfCancellationRequested(config: AsRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }
