@@ -124,6 +124,7 @@
     "tslint-loader": "^3.5.4",
     "express": "^4.16.4",
     "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
     "qs": "^6.7.0",
     "@types/qs": "^6.5.3"
   }
