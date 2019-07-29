@@ -1,6 +1,8 @@
 import { AsRequestConfig, AsPromise, AsResponseConfig } from '../types'
 import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
+import { isURLSameOrigin } from '../helpers/url'
+import cookie from '../helpers/cookie'
 
 /**
  * 处理请求，存储返回信息
@@ -19,7 +21,9 @@ export default function xhr(config: AsRequestConfig): AsPromise {
       responseType,
       timeout,
       cancelToken,
-      withCredentials
+      withCredentials,
+      xsrfHeaderName,
+      xsrfCookieName
     } = config
 
     const request = new XMLHttpRequest()
@@ -72,6 +76,13 @@ export default function xhr(config: AsRequestConfig): AsPromise {
     // 处理超时请求
     request.ontimeout = function handleTimeout() {
       reject(createError(`Timeout of ${timeout}ms exceeded!`, config, 'ECONNABORTED', request))
+    }
+
+    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+      const xsrfValue = cookie.read(xsrfCookieName)
+      if (xsrfValue && xsrfHeaderName) {
+        headers[xsrfHeaderName] = xsrfValue
+      }
     }
 
     // 处理请求头
