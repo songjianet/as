@@ -2,6 +2,7 @@ import { AsRequestConfig, AsPromise, AsResponseConfig } from '../types'
 import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
 import { isURLSameOrigin } from '../helpers/url'
+import { isFormData } from '../helpers/util'
 import cookie from '../helpers/cookie'
 
 /**
@@ -23,86 +24,114 @@ export default function xhr(config: AsRequestConfig): AsPromise {
       cancelToken,
       withCredentials,
       xsrfHeaderName,
-      xsrfCookieName
+      xsrfCookieName,
+      onDownloadProgress,
+      onUploadProgress
     } = config
 
     const request = new XMLHttpRequest()
 
-    // 设置超时
-    if (timeout) {
-      request.timeout = timeout
-    }
-
-    // 设置返回类型
-    if (responseType) {
-      request.responseType = responseType
-    }
-
-    if (withCredentials) {
-      request.withCredentials = withCredentials
-    }
-
     // 打开请求
     request.open(method.toUpperCase(), url!, true)
 
-    // 包装返回数据
-    request.onreadystatechange = function handleLoad() {
-      if (request.readyState !== 4) {
-        return
-      }
-
-      if (request.status === 0) {
-        return
-      }
-
-      const responseHeaders = parseHeaders(request.getAllResponseHeaders())
-      const responseData = responseType !== 'text' ? request.response : request.responseText
-      const response: AsResponseConfig = {
-        data: responseData,
-        status: request.status,
-        statusText: request.statusText,
-        headers: responseHeaders,
-        config,
-        request
-      }
-      handleResponse(response)
-    }
-
-    // 处理错误请求
-    request.onerror = function handleError() {
-      reject(createError('Network Error!', config, null, request))
-    }
-
-    // 处理超时请求
-    request.ontimeout = function handleTimeout() {
-      reject(createError(`Timeout of ${timeout}ms exceeded!`, config, 'ECONNABORTED', request))
-    }
-
-    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
-      const xsrfValue = cookie.read(xsrfCookieName)
-      if (xsrfValue && xsrfHeaderName) {
-        headers[xsrfHeaderName] = xsrfValue
-      }
-    }
-
-    // 处理请求头
-    Object.keys(headers).forEach(n => {
-      if (data === null && n.toLowerCase() === 'content-type') {
-        delete headers[n]
-      } else {
-        request.setRequestHeader(n, headers[n])
-      }
-    })
-
-    if (cancelToken) {
-      cancelToken.promise.then(reason => {
-        request.abort()
-        reject(reason)
-      })
-    }
+    configureRequest()
+    addEvents()
+    processHeaders()
+    processCancel()
 
     // 发送请求
     request.send(data)
+
+    function configureRequest(): void {
+      if (timeout) {
+        // 设置超时
+        request.timeout = timeout
+      }
+
+      if (responseType) {
+        // 设置返回类型
+        request.responseType = responseType
+      }
+
+      if (withCredentials) {
+        // 设置跨域相关
+        request.withCredentials = withCredentials
+      }
+    }
+
+    function addEvents(): void {
+      request.onreadystatechange = function handleLoad() {
+        // 包装返回数据
+        if (request.readyState !== 4) {
+          return
+        }
+        if (request.status === 0) {
+          return
+        }
+        const responseHeaders = parseHeaders(request.getAllResponseHeaders())
+        const responseData = responseType !== 'text' ? request.response : request.responseText
+        const response: AsResponseConfig = {
+          data: responseData,
+          status: request.status,
+          statusText: request.statusText,
+          headers: responseHeaders,
+          config,
+          request
+        }
+        handleResponse(response)
+      }
+
+      request.onerror = function handleError() {
+        // 处理错误请求
+        reject(createError('Network Error!', config, null, request))
+      }
+
+      request.ontimeout = function handleTimeout() {
+        // 处理超时请求
+        reject(createError(`Timeout of ${timeout}ms exceeded!`, config, 'ECONNABORTED', request))
+      }
+
+      if (onDownloadProgress) {
+        // 下载监控
+        request.onprogress = onDownloadProgress
+      }
+
+      if (onUploadProgress) {
+        // 上传监控
+        request.upload.onprogress = onUploadProgress
+      }
+    }
+
+    function processHeaders(): void {
+      if (isFormData(data)) {
+        delete headers['Content-Type']
+      }
+
+      if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+        const xsrfValue = cookie.read(xsrfCookieName)
+        if (xsrfValue && xsrfHeaderName) {
+          headers[xsrfHeaderName] = xsrfValue
+        }
+      }
+
+      Object.keys(headers).forEach(n => {
+        // 处理请求头
+        if (data === null && n.toLowerCase() === 'content-type') {
+          delete headers[n]
+        } else {
+          request.setRequestHeader(n, headers[n])
+        }
+      })
+    }
+
+    function processCancel(): void {
+      if (cancelToken) {
+        cancelToken.promise.then(reason => {
+          request.abort()
+          reject(reason)
+        })
+      }
+    }
 
     // 处理http状态码
     function handleResponse(res: AsResponseConfig): void {

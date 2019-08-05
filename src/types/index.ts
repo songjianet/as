@@ -28,6 +28,8 @@ export interface AsRequestConfig {
   withCredentials?: boolean
   xsrfCookieName?: string
   xsrfHeaderName?: string
+  onDownloadProgress?: (e: ProgressEvent) => void
+  onUploadProgress?: (e: ProgressEvent) => void
 
   [propName: string]: any // 为合并请求默认属性设置一个签名，可以参考/src/core/mergeConfig文件
 }
