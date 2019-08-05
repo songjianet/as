@@ -130,6 +130,7 @@
     "webpack-hot-middleware": "^2.25.0",
     "nprogress": "^0.2.0",
     "style-loader": "^0.23.1",
-    "css-loader": "^3.1.0"
+    "css-loader": "^3.1.0",
+    "connect-multiparty": "^2.2.0"
   }
 }
