@@ -27,7 +27,8 @@ export default function xhr(config: AsRequestConfig): AsPromise {
       xsrfCookieName,
       onDownloadProgress,
       onUploadProgress,
-      auth
+      auth,
+      validateStatus
     } = config
 
     const request = new XMLHttpRequest()
@@ -140,7 +141,7 @@ export default function xhr(config: AsRequestConfig): AsPromise {
 
     // 处理http状态码
     function handleResponse(res: AsResponseConfig): void {
-      if (res.status >= 200 && res.status < 300) {
+      if (!validateStatus || validateStatus(res.status)) {
         resolve(res)
       } else {
         reject(
