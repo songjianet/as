@@ -24,58 +24,72 @@ import NProgress from 'nprogress'
 // })
 
 
+
+
+
 // test upload and download
-const instance = as.create()
+// const instance = as.create()
+//
+// function calculatePercentage(loaded: number, total: number) {
+//   return Math.floor(loaded * 1.0) / total
+// }
+//
+// function loadProgressBar() {
+//   const setupStartProgress = () => {
+//     instance.interceptors.request.use(config => {
+//       NProgress.start()
+//       return config
+//     })
+//   }
+//
+//   const setupUpdataProgress = () => {
+//     const update = (e: ProgressEvent) => {
+//       console.log(e)
+//       NProgress.set(calculatePercentage(e.loaded, e.total))
+//     }
+//     instance.defaults.onDownloadProgress = update
+//     instance.defaults.onUploadProgress = update
+//   }
+//
+//   const setupStopProgress = () => {
+//     instance.interceptors.response.use(response => {
+//       NProgress.done()
+//       return response
+//     }, error => {
+//       NProgress.done()
+//       return Promise.reject(error)
+//     })
+//   }
+//
+//   setupStartProgress()
+//   setupUpdataProgress()
+//   setupStopProgress()
+// }
+//
+// loadProgressBar()
+//
+// const downloadEl = document.getElementById('download')
+// downloadEl!.addEventListener('click', e => {
+//   instance.get('https://cn.bing.com/sa/simg/SharedSpriteDesktop_2x_040919.png')
+// })
+//
+// const uploadEl = document.getElementById('upload')
+// uploadEl!.addEventListener('click', e => {
+//   const data = new FormData()
+//   const fileEl = document.getElementById('file') as HTMLInputElement
+//   if (fileEl.files) {
+//     data.append('file', fileEl.files[0])
+//     instance.post('/more/upload', data)
+//   }
+// })
 
-function calculatePercentage(loaded: number, total: number) {
-  return Math.floor(loaded * 1.0) / total
-}
-
-function loadProgressBar() {
-  const setupStartProgress = () => {
-    instance.interceptors.request.use(config => {
-      NProgress.start()
-      return config
-    })
+as.post('/more/post', {
+  a: 1
+}, {
+  auth: {
+    username: 'songjianet',
+    password: '123456'
   }
-
-  const setupUpdataProgress = () => {
-    const update = (e: ProgressEvent) => {
-      console.log(e)
-      NProgress.set(calculatePercentage(e.loaded, e.total))
-    }
-    instance.defaults.onDownloadProgress = update
-    instance.defaults.onUploadProgress = update
-  }
-
-  const setupStopProgress = () => {
-    instance.interceptors.response.use(response => {
-      NProgress.done()
-      return response
-    }, error => {
-      NProgress.done()
-      return Promise.reject(error)
-    })
-  }
-
-  setupStartProgress()
-  setupUpdataProgress()
-  setupStopProgress()
-}
-
-loadProgressBar()
-
-const downloadEl = document.getElementById('download')
-downloadEl!.addEventListener('click', e => {
-  instance.get('https://cn.bing.com/sa/simg/SharedSpriteDesktop_2x_040919.png')
-})
-
-const uploadEl = document.getElementById('upload')
-uploadEl!.addEventListener('click', e => {
-  const data = new FormData()
-  const fileEl = document.getElementById('file') as HTMLInputElement
-  if (fileEl.files) {
-    data.append('file', fileEl.files[0])
-    instance.post('/more/upload', data)
-  }
+}).then(res => {
+  console.log(res)
 })
