@@ -30,6 +30,7 @@ export interface AsRequestConfig {
   xsrfHeaderName?: string
   onDownloadProgress?: (e: ProgressEvent) => void
   onUploadProgress?: (e: ProgressEvent) => void
+  auth?: AsBasicCredentials
 
   [propName: string]: any // 为合并请求默认属性设置一个签名，可以参考/src/core/mergeConfig文件
 }
@@ -141,4 +142,9 @@ export interface Cancel {
 
 export interface CancelStatic {
   new (message?: string): Cancel
+}
+
+export interface AsBasicCredentials {
+  username: string
+  password: string
 }
