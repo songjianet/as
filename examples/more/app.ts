@@ -1,4 +1,5 @@
 import as from '../../src'
+import qs from 'qs'
 import 'nprogress/nprogress.css'
 import NProgress from 'nprogress'
 
@@ -22,9 +23,6 @@ import NProgress from 'nprogress'
 // instance.get('/more/get').then(res => {
 //   console.log(res)
 // })
-
-
-
 
 
 // test upload and download
@@ -83,13 +81,43 @@ import NProgress from 'nprogress'
 //   }
 // })
 
-as.post('/more/post', {
-  a: 1
-}, {
-  auth: {
-    username: 'songjianet',
-    password: '123456'
+// as.post('/more/post', {
+//   a: 1
+// }, {
+//   auth: {
+//     username: 'songjianet',
+//     password: '123456'
+//   }
+// }).then(res => {
+//   console.log(res)
+// })
+
+as.get('/more/get', {
+  params: new URLSearchParams('a=b&c=d')
+}).then(res => {
+  console.log(res)
+})
+
+as.get('/more/get', {
+  params: {
+    a: 1,
+    b: 2,
+    c: ['a', 'b', 'c']
   }
+}).then(res => {
+  console.log(res)
+})
+
+const instance = as.create({
+  paramsSerializer(params) {
+    return qs.stringify(params, {arrayFormat: 'brackets'})
+  }
+})
+
+instance.get('/more/get', {
+  a: 1,
+  b: 2,
+  c: ['a', 'b', 'c']
 }).then(res => {
   console.log(res)
 })
