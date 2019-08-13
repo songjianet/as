@@ -92,32 +92,42 @@ import NProgress from 'nprogress'
 //   console.log(res)
 // })
 
-as.get('/more/get', {
-  params: new URLSearchParams('a=b&c=d')
-}).then(res => {
-  console.log(res)
-})
+// 参数序列化
+// as.get('/more/get', {
+//   params: new URLSearchParams('a=b&c=d')
+// }).then(res => {
+//   console.log(res)
+// })
+//
+// as.get('/more/get', {
+//   params: {
+//     a: 1,
+//     b: 2,
+//     c: ['a', 'b', 'c']
+//   }
+// }).then(res => {
+//   console.log(res)
+// })
+//
+// const instance = as.create({
+//   paramsSerializer(params) {
+//     return qs.stringify(params, {arrayFormat: 'brackets'})
+//   }
+// })
+//
+// instance.get('/more/get', {
+//   a: 1,
+//   b: 2,
+//   c: ['a', 'b', 'c']
+// }).then(res => {
+//   console.log(res)
+// })
 
-as.get('/more/get', {
-  params: {
-    a: 1,
-    b: 2,
-    c: ['a', 'b', 'c']
-  }
-}).then(res => {
-  console.log(res)
-})
-
+// baseURL
 const instance = as.create({
-  paramsSerializer(params) {
-    return qs.stringify(params, {arrayFormat: 'brackets'})
-  }
+  baseURL: 'https://www.bing.com/'
 })
 
-instance.get('/more/get', {
-  a: 1,
-  b: 2,
-  c: ['a', 'b', 'c']
-}).then(res => {
-  console.log(res)
-})
+instance.get('https://www.bing.com/sa/simg/SharedSpriteDesktop_2x_040919.png')
+
+instance.get('rs/3Q/hT/ic/68e94a1b/d7ffd2fd.svg')
