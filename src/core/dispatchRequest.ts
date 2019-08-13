@@ -39,8 +39,8 @@ function processConfig(config: AsRequestConfig): void {
  * @author songjianet
  */
 function transformURL(config: AsRequestConfig): string {
-  const { url, params } = config
-  return buildURL(url!, params)
+  const { url, params, paramsSerializer } = config
+  return buildURL(url!, params, paramsSerializer)
 }
 
 /**

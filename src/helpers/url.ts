@@ -1,4 +1,4 @@
-import { isPlainObject, isDate } from './util'
+import { isPlainObject, isDate, isURLSearchParams } from './util'
 
 interface URLOrigin {
   protocol: string
@@ -31,38 +31,51 @@ function encode(val: string): string {
  * @returns {string} 处理后的URL字符串
  * @author songjianet
  */
-export function buildURL(url: string, params?: any): string {
+export function buildURL(
+  url: string,
+  params?: any,
+  paramsSerializer?: (params: any) => string
+): string {
   if (!params) {
     return url
   }
 
-  const parts: string[] = []
+  let serializedParams
 
-  Object.keys(params).forEach(k => {
-    const val = params[k]
-    if (val === null || typeof val === 'undefined') {
-      return
-    }
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params)
+  } else if (isURLSearchParams(params)) {
+    serializedParams = params.toString()
+  } else {
+    const parts: string[] = []
 
-    let values = []
-    if (Array.isArray(val)) {
-      values = val
-      k += '[]'
-    } else {
-      values = [val]
-    }
-
-    values.forEach(v => {
-      if (isDate(v)) {
-        v = v.toISOString()
-      } else if (isPlainObject(val)) {
-        v = JSON.stringify(v)
+    Object.keys(params).forEach(k => {
+      const val = params[k]
+      if (val === null || typeof val === 'undefined') {
+        return
       }
-      parts.push(`${encode(k)}=${encode(v)}`)
-    })
-  })
 
-  let serializedParams = parts.join('&')
+      let values = []
+      if (Array.isArray(val)) {
+        values = val
+        k += '[]'
+      } else {
+        values = [val]
+      }
+
+      values.forEach(v => {
+        if (isDate(v)) {
+          v = v.toISOString()
+        } else if (isPlainObject(val)) {
+          v = JSON.stringify(v)
+        }
+        parts.push(`${encode(k)}=${encode(v)}`)
+      })
+    })
+
+    serializedParams = parts.join('&')
+  }
+
   if (serializedParams) {
     const markIndex = url.indexOf('#')
     if (markIndex !== -1) {

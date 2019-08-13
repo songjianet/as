@@ -4,6 +4,10 @@ export function isDate(val: any): val is Date {
   return TYPE_TO_STRING.call(val) === '[object Date]'
 }
 
+export function isURLSearchParams(val: any): val is URLSearchParams {
+  return typeof val !== 'undefined' && val instanceof URLSearchParams
+}
+
 export function isPlainObject(val: any): val is Object {
   return TYPE_TO_STRING.call(val) === '[object Object]'
 }
