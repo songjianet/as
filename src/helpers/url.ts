@@ -28,6 +28,7 @@ function encode(val: string): string {
  *
  * @param url {string} 请求地址
  * @param params {any} 可选的请求参数
+ * @param paramsSerializer 参数序列化
  * @returns {string} 处理后的URL字符串
  * @author songjianet
  */
