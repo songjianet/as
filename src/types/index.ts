@@ -33,6 +33,7 @@ export interface AsRequestConfig {
   auth?: AsBasicCredentials
   validateStatus?: (status: number) => boolean
   paramsSerializer?: (params: any) => string
+  baseURL?: string
 
   [propName: string]: any // 为合并请求默认属性设置一个签名，可以参考/src/core/mergeConfig文件
 }

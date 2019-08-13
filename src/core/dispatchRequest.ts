@@ -1,5 +1,5 @@
 import { AsRequestConfig, AsResponseConfig, AsPromise } from '../types'
-import { buildURL } from '../helpers/url'
+import { buildURL, combineURL, isAbsoluteURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/headers'
 import xhr from './xhr'
 import { transform } from './transform'
@@ -39,7 +39,10 @@ function processConfig(config: AsRequestConfig): void {
  * @author songjianet
  */
 function transformURL(config: AsRequestConfig): string {
-  const { url, params, paramsSerializer } = config
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url!)
+  }
   return buildURL(url!, params, paramsSerializer)
 }
 
