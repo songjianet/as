@@ -124,10 +124,41 @@ import NProgress from 'nprogress'
 // })
 
 // baseURL
-const instance = as.create({
-  baseURL: 'https://www.bing.com/'
+// const instance = as.create({
+//   baseURL: 'https://www.bing.com/'
+// })
+//
+// instance.get('https://www.bing.com/sa/simg/SharedSpriteDesktop_2x_040919.png')
+//
+// instance.get('rs/3Q/hT/ic/68e94a1b/d7ffd2fd.svg')
+
+// static function extend
+function getA() {
+  return as.get('/more/A')
+}
+
+function getB() {
+  return as.get('/more/B')
+}
+
+as.all([getA(), getB()]).then(as.spread(function(resA, resB) {
+  console.log(resA.data)
+  console.log(resB.data)
+}))
+
+as.all([getA(), getB()]).then(([resA, resB]) => {
+  console.log(resA.data)
+  console.log(resB.data)
 })
 
-instance.get('https://www.bing.com/sa/simg/SharedSpriteDesktop_2x_040919.png')
+const fakeConfig = {
+  baseURL: 'https://www.baidu.com/',
+  url: '/user/1023',
+  params: {
+    idClient: 1,
+    idTest: 2,
+    testString: 'this is a test'
+  }
+}
 
-instance.get('rs/3Q/hT/ic/68e94a1b/d7ffd2fd.svg')
+console.log(as.getUri(fakeConfig))
