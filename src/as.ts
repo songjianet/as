@@ -21,6 +21,18 @@ as.create = function create(config) {
   return createInstance(mergeConfig(defaults, config))
 }
 
+as.all = function all(promises) {
+  return Promise.all(promises)
+}
+
+as.spread = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr)
+  }
+}
+
+as.As = As
+
 as.CancelToken = CancelToken
 as.Cancel = Cancel
 as.isCancel = isCancel

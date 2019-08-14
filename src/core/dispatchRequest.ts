@@ -38,7 +38,7 @@ function processConfig(config: AsRequestConfig): void {
  * @returns {string} 处理后的URL
  * @author songjianet
  */
-function transformURL(config: AsRequestConfig): string {
+export function transformURL(config: AsRequestConfig): string {
   let { url, params, paramsSerializer, baseURL } = config
   if (baseURL && !isAbsoluteURL(url!)) {
     url = combineURL(baseURL, url!)

@@ -6,7 +6,7 @@ import {
   RejectedFn,
   ResolvedFn
 } from '../types'
-import dispatchRequest from './dispatchRequest'
+import dispatchRequest, { transformURL } from './dispatchRequest'
 import InterceptorManager from './interceptorManager'
 import mergeConfig from './mergeConfig'
 
@@ -95,6 +95,11 @@ export default class As {
 
   patch(url: string, data?: any, config?: AsRequestConfig): AsPromise {
     return this._requestMethodWithData('patch', url, data, config)
+  }
+
+  getUri(config?: AsRequestConfig): string {
+    config = mergeConfig(this.defaults, config)
+    return transformURL(config)
   }
 
   _requestMethodWithoutData(method: Method, url: string, config?: AsRequestConfig): AsPromise {

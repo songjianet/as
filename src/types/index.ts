@@ -79,6 +79,8 @@ export interface As {
   put<T = any>(url: string, data?: any, config?: AsRequestConfig): AsPromise<T>
 
   patch<T = any>(url: string, data?: any, config?: AsRequestConfig): AsPromise<T>
+
+  getUri(config?: AsRequestConfig): string
 }
 
 export interface AsInstance extends As {
@@ -87,12 +89,22 @@ export interface AsInstance extends As {
   <T = any>(url: string, config?: AsRequestConfig): AsPromise<T>
 }
 
+export interface AsClassStatic {
+  new (config: AsRequestConfig): As
+}
+
 export interface AsStatic extends AsInstance {
   create(config?: AsRequestConfig): AsInstance
 
   CancelToken: CancelTokenStatic
   Cancel: CancelStatic
   isCancel: (value: any) => boolean
+
+  all<T>(promises: Array<T | Promise<T>>): Promise<T[]>
+
+  spread<T, R>(callback: (...args: T[]) => R): (arr: T[]) => R
+
+  As: AsClassStatic
 }
 
 export interface AsInterceptorManager<T> {
