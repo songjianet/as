@@ -55,12 +55,80 @@ describe('helpers:url', () => {
       ).toBe('/foo?foo=bar&bar=baz')
     })
 
-    test('should correct discard url hash mark', () => {})
+    test('should correct discard url hash mark', () => {
+      expect(
+        buildURL('/foo?foo=bar#hash', {
+          query: 'baz'
+        })
+      ).toBe('/foo?foo=bar&query=baz')
+    })
+
+    test('should use serializer if provided', () => {
+      const serializer = jest.fn(() => {
+        return 'foo=bar'
+      })
+      const params = { foo: 'bar' }
+      expect(buildURL('/foo', params, serializer)).toBe('/foo?foo=bar')
+      expect(serializer).toHaveBeenCalled()
+      expect(serializer).toHaveBeenCalledWith(params)
+    })
+
+    test('should support URLSearchParams', () => {
+      expect(buildURL('/foo', new URLSearchParams('bar=baz'))).toBe('/foo?bar=baz')
+    })
   })
 
-  describe('isAbsoluteURL', () => {})
+  describe('isAbsoluteURL', () => {
+    test('should return true if URL begins with valid scheme name', () => {
+      expect(isAbsoluteURL('https://api.github.com/users')).toBeTruthy()
+      expect(isAbsoluteURL('custom-scheme-v1.0://example.com/')).toBeTruthy()
+      expect(isAbsoluteURL('HTTP://example.com/')).toBeTruthy()
+    })
 
-  describe('combineURL', () => {})
+    test('should return false if URL begins with invalid scheme name', () => {
+      expect(isAbsoluteURL('123://example.com/')).toBeFalsy()
+      expect(isAbsoluteURL('!valid://example.com/')).toBeFalsy()
+    })
 
-  describe('isURLSameOrigin', () => {})
+    test('should return true if URL is protocol-relative', () => {
+      expect(isAbsoluteURL('//example.com/')).toBeTruthy()
+    })
+
+    test('should return false if UTL is relative', () => {
+      expect(isAbsoluteURL('/foo')).toBeFalsy()
+      expect(isAbsoluteURL('foo')).toBeFalsy()
+    })
+  })
+
+  describe('combineURL', () => {
+    test('should combine URL', () => {
+      expect(combineURL('https://api.github.com', '/users')).toBe('https://api.github.com/users')
+    })
+
+    test('should remove duplicate slashes', () => {
+      expect(combineURL('https://api.github.com/', '/users')).toBe('https://api.github.com/users')
+    })
+
+    test('should insert missing slash', () => {
+      expect(combineURL('https://api.github.com', 'users')).toBe('https://api.github.com/users')
+    })
+
+    test('should not insert slash when relative url missing/empty', () => {
+      expect(combineURL('https://api.github.com/users', '')).toBe('https://api.github.com/users')
+    })
+
+    test('should allow a single slash for relative url', () => {
+      expect(combineURL('https://api.github.com/users', '/')).toBe('https://api.github.com/users/')
+    })
+  })
+
+  describe('isURLSameOrigin', () => {
+    test('should detect same origin', () => {
+      expect(isURLSameOrigin(window.location.href)).toBeTruthy()
+    })
+
+    test('should detect different origin', () => {
+      expect(isURLSameOrigin('https://github.com/axios/axios')).toBeFalsy()
+    })
+  })
 })
