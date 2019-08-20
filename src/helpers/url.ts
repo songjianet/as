@@ -93,7 +93,7 @@ export function isAbsoluteURL(url: string): boolean {
 }
 
 export function combineURL(baseURL: string, relativeURL: string): string {
-  return relativeURL ? baseURL.replace(/\+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
+  return relativeURL ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '') : baseURL
 }
 
 export function isURLSameOrigin(requestURL: string): boolean {
