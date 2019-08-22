@@ -18,7 +18,7 @@ export default function xhr(config: AsRequestConfig): AsPromise {
       data = null,
       url,
       method = 'get',
-      headers,
+      headers = {},
       responseType,
       timeout,
       cancelToken,
