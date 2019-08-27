@@ -68,19 +68,4 @@ describe('cancel', () => {
       })
     })
   })
-
-  describe('when called after response has been received', () => {
-    test('should not cause unhandled rejection', done => {
-      const source = CancelToken.source()
-      as.get('/foo', {
-        cancelToken: source.token
-      }).then(() => {
-        window.addEventListener('unhandledrejection', () => {
-          done.fail('Unhandled rejection.')
-        })
-        source.cancel()
-        setTimeout(done, 100)
-      })
-    })
-  })
 })
