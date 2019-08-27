@@ -7,6 +7,7 @@ export class AsError extends Error {
   request?: any
   response?: AsResponseConfig
 
+  /* istanbul ignore next */
   constructor(
     message: string,
     config: AsRequestConfig,
