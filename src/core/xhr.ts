@@ -17,7 +17,7 @@ export default function xhr(config: AsRequestConfig): AsPromise {
     const {
       data = null,
       url,
-      method = 'get',
+      method,
       headers = {},
       responseType,
       timeout,
@@ -34,7 +34,7 @@ export default function xhr(config: AsRequestConfig): AsPromise {
     const request = new XMLHttpRequest()
 
     // 打开请求
-    request.open(method.toUpperCase(), url!, true)
+    request.open(method!.toUpperCase(), url!, true)
 
     configureRequest()
     addEvents()
@@ -71,7 +71,8 @@ export default function xhr(config: AsRequestConfig): AsPromise {
           return
         }
         const responseHeaders = parseHeaders(request.getAllResponseHeaders())
-        const responseData = responseType !== 'text' ? request.response : request.responseText
+        const responseData =
+          responseType && responseType !== 'text' ? request.response : request.responseText
         const response: AsResponseConfig = {
           data: responseData,
           status: request.status,
