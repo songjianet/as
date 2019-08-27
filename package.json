@@ -54,11 +54,7 @@
     },
     "testEnvironment": "jsdom",
     "testRegex": "(/test/.*\\.(test|spec))\\.(ts)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/"
