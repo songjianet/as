@@ -1,6 +1,6 @@
 {
   "name": "ts-as",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "keywords": [],
   "main": "dist/as.umd.js",
@@ -54,8 +54,15 @@
     },
     "testEnvironment": "jsdom",
     "testRegex": "(/test/.*\\.(test|spec))\\.(ts)$",
-    "moduleFileExtensions": ["ts", "tsx", "js"],
-    "coveragePathIgnorePatterns": ["/node_modules/", "/test/"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 90,
